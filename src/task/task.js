@@ -14,7 +14,8 @@ export default class Task extends Component {
   static defaultProps = {
     deleteItem: () => {},
     onChecked: () => {},
-    editTask: () => {}
+    editTask: () => {},
+    onReject: () => {}
   }
 
   static propTypes = {
@@ -46,13 +47,6 @@ export default class Task extends Component {
     })
   }
 
-  onReject = (e) => {
-    this.setState({
-      label: this.props.label
-    })
-    this.props.onEditing();
-  }
-
   onSubmit = (e) => {
     e.preventDefault();
     this.props.editTask(this.props.id, this.state.label);
@@ -79,8 +73,7 @@ export default class Task extends Component {
           <button className="icon icon-destroy"
           onClick={deleteItem}/>
         </div>
-        <form onSubmit={this.onSubmit}
-        onBlur={this.onReject}>
+        <form onSubmit={this.onSubmit}>
           <input type="text" className="edit" value={this.state.label}
           onChange={this.onLabelChange}/>
         </form>
