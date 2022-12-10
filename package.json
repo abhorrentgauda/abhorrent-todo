@@ -20,7 +20,11 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix",
+    "prepare": "husky install",
+    "pre-commit": "lint-staged"
   },
   "eslintConfig": {
     "extends": [
@@ -41,6 +45,33 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^4.0.0"
+    "babel-eslint": "^10.1.0",
+    "eslint": "^8.29.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.6.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.31.11",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "gh-pages": "^4.0.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.1.0",
+    "prettier": "^2.8.1"
+  },
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abhorrentgauda/abhorrent-todo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abhorrentgauda/abhorrent-todo/issues"
+  },
+  "description": "",
+  "lint-staged": {
+    "src/**/*.{js,html.css}": "prettier --write",
+    "src/**/*.js": "eslint"
   }
 }
