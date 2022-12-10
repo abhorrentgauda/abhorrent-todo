@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/abhorrent-todo/static/css/main.0d954f1e.css",
-    "main.js": "/abhorrent-todo/static/js/main.81903885.js",
+    "main.js": "/abhorrent-todo/static/js/main.de8d2312.js",
     "index.html": "/abhorrent-todo/index.html",
     "main.0d954f1e.css.map": "/abhorrent-todo/static/css/main.0d954f1e.css.map",
-    "main.81903885.js.map": "/abhorrent-todo/static/js/main.81903885.js.map"
+    "main.de8d2312.js.map": "/abhorrent-todo/static/js/main.de8d2312.js.map"
   },
   "entrypoints": [
     "static/css/main.0d954f1e.css",
-    "static/js/main.81903885.js"
+    "static/js/main.de8d2312.js"
   ]
 }
