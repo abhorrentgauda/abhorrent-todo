@@ -14,8 +14,7 @@ export default class Task extends Component {
   static defaultProps = {
     deleteItem: () => {},
     onChecked: () => {},
-    editTask: () => {},
-    onReject: () => {}
+    editTask: () => {}
   }
 
   static propTypes = {
