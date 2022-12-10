@@ -7,7 +7,7 @@ import "./task.css";
 export default class Task extends Component {
 
   state = {
-    date: this.props.date,
+    // date: this.props.date,
     label: this.props.label
   }
 
@@ -26,19 +26,19 @@ export default class Task extends Component {
     id: PropTypes.number
   }
 
-  tick = () => {
-    this.setState({
-      date: this.state.date
-    });
-  }
+  // tick = () => {
+  //   this.setState({
+  //     date: this.state.date
+  //   });
+  // }
 
-  componentDidMount = () => {
-    this.timerID = setInterval(() => this.tick(), 1000);
-  }
+  // componentDidMount = () => {
+  //   this.timerID = setInterval(() => this.tick(), 1000);
+  // }
 
-  componentWillUnmount = () => {
-    clearInterval(this.timerID);
-  }
+  // componentWillUnmount = () => {
+  //   clearInterval(this.timerID);
+  // }
 
   onLabelChange = (e) => {
     this.setState({
