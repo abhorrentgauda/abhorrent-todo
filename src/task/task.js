@@ -61,12 +61,7 @@ export default class Task extends Component {
               {label}
             </span>
             <span className="created">
-              `created
-              {formatDistanceToNow(date, {
-                includeSeconds: true,
-                addSuffix: true,
-              })}
-              `
+              `created {formatDistanceToNow(date, { includeSeconds: true, addSuffix: true })}`
             </span>
           </label>
           <button type="button" className="icon icon-edit" onClick={onEditing} />
