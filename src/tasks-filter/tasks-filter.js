@@ -30,9 +30,10 @@ export default class TasksFilter extends Component {
 
       return (
         <li key={name}>
-          <button type="button" onClick={() => onFilterChange(name)} className={classNames}>
-            {label}
-          </button>
+          <form className={classNames}>
+            <input type="radio" onClick={() => onFilterChange(name)}></input>
+            <label>{label}</label>
+          </form>
         </li>
       );
     });

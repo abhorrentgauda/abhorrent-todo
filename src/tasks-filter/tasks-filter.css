@@ -3,25 +3,26 @@
 	cursor: default;
 }
 
-.filters li button {
+.filters li .button {
 	display: inline-block;
 	color: inherit;
+	position: relative;
 	margin: 3px;
-	padding: 3px 7px;
+	padding: 3px 10px;
 	text-decoration: none;
 	border: 1px solid transparent;
 	border-radius: 3px;
 }
 
-.filters li button:not(.selected) {
+.filters li .button:not(.selected) {
 	cursor: pointer;
 }
 
-.filters li:hover button {
+.filters li:hover .button {
 	border-color: rgba(175, 47, 47, 0.1);
 }
 
-.filters li button.selected {
+.filters li .button.selected {
 	border-color: rgba(175, 47, 47, 0.2);
 }
 
@@ -35,4 +36,18 @@ html .clear-completed:active {
 
 .clear-completed:hover {
 	text-decoration: underline;
+}
+
+.button input[type="radio"] {
+	opacity: 0;
+	z-index: 100;
+}
+
+.button input {
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
 }
