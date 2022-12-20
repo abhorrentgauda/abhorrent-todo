@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 export default class NewTaskForm extends Component {
   state = {
     label: '',
+    min: '',
+    sec: '',
   };
 
   static defaultProps = {
@@ -15,17 +17,20 @@ export default class NewTaskForm extends Component {
     addTask: PropTypes.func,
   };
 
-  onLabelChange = (e) => {
+  handleChange = (e) => {
     this.setState({
-      label: e.target.value,
+      [e.target.name]: e.target.value,
     });
   };
 
   onSubmit = (e) => {
+    const { label, min, sec } = this.state;
     e.preventDefault();
-    this.props.addTask(this.state.label);
+    this.props.addTask(label, min, sec);
     this.setState({
       label: '',
+      min: '',
+      sec: '',
     });
   };
 
@@ -33,14 +38,35 @@ export default class NewTaskForm extends Component {
     return (
       <header className="header">
         <h1>todos</h1>
-        <form onSubmit={this.onSubmit}>
+        <form onSubmit={this.onSubmit} className="new-todo-form">
           <input
             className="new-todo"
-            placeholder="What needs to be done?"
-            autoFocus
-            onChange={this.onLabelChange}
+            placeholder="Task"
+            name="label"
+            type="text"
+            autoFocus={true}
+            onChange={this.handleChange}
             value={this.state.label}
           />
+          <input
+            className="new-todo-form__timer"
+            placeholder="Min"
+            name="min"
+            type="number"
+            max="59"
+            onChange={this.handleChange}
+            value={this.state.min}
+          />
+          <input
+            className="new-todo-form__timer"
+            placeholder="Sec"
+            name="sec"
+            type="number"
+            max="59"
+            onChange={this.handleChange}
+            value={this.state.sec}
+          />
+          <input className="new-todo-form__submit" type="submit" />
         </form>
       </header>
     );

@@ -19,10 +19,10 @@ export default class TaskList extends Component {
   };
 
   render() {
-    const { todoList, deleteItem, onChecked, onEditing, editTask } = this.props;
+    const { todoList, deleteItem, onChecked, onEditing, editTask, tick } = this.props;
 
     const tasks = todoList.map((task) => {
-      const { id, checked, date, editing, ...params } = task;
+      const { id, checked, date, editing, sec, ...params } = task;
       let classNames = 'task-item';
       if (checked) classNames += ' completed';
       if (editing) classNames = 'task-item editing';
@@ -31,6 +31,7 @@ export default class TaskList extends Component {
         <li key={id} className={classNames}>
           <Task
             date={date}
+            sec={sec}
             {...params}
             checked={checked}
             id={id}
@@ -38,6 +39,7 @@ export default class TaskList extends Component {
             onChecked={() => onChecked(id)}
             onEditing={() => onEditing(id)}
             editTask={editTask}
+            tick={() => tick(id, 'sec')}
           />
         </li>
       );

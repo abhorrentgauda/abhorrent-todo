@@ -10,17 +10,22 @@ export default class App extends Component {
   maxId = 100;
 
   state = {
-    todoList: [this.createItem('drink coffee'), this.createItem('eat samsa'), this.createItem('work hard')],
+    todoList: [
+      this.createItem('drink coffee', '1', '30'),
+      this.createItem('eat samsa', '1', '30'),
+      this.createItem('work hard', '1', '30'),
+    ],
     filter: 'all',
   };
 
-  createItem(label) {
+  createItem(label, min, sec) {
     return {
       label,
       id: this.maxId++,
       checked: false,
       editing: false,
       date: new Date(),
+      sec: +min * 60 + +sec,
     };
   }
 
@@ -66,8 +71,8 @@ export default class App extends Component {
     }
   }
 
-  addNewTask = (text) => {
-    const newTask = this.createItem(text);
+  addNewTask = (text, min, sec) => {
+    const newTask = this.createItem(text, min, sec);
 
     this.setState(({ todoList }) => ({
       todoList: [...todoList, newTask],
@@ -99,6 +104,21 @@ export default class App extends Component {
     this.setState({ filter });
   };
 
+  tick = (id, sec) => {
+    const copyTodoList = [...this.state.todoList];
+
+    const idx = copyTodoList.findIndex((el) => el.id === id);
+
+    const copyItem = this.state.todoList[idx];
+    if (copyItem[sec] !== 0) {
+      const newItem = { ...copyItem, [sec]: --copyItem[sec] };
+
+      this.setState(({ todoList }) => ({
+        todoList: [...todoList.slice(0, idx), newItem, ...todoList.slice(idx + 1)],
+      }));
+    }
+  };
+
   render() {
     const { todoList, filter } = this.state;
 
@@ -116,6 +136,7 @@ export default class App extends Component {
             onChecked={this.onChecked}
             onEditing={this.onEditing}
             editTask={this.editTask}
+            tick={this.tick}
           />
           <Footer
             todoCounter={todoCounter}
