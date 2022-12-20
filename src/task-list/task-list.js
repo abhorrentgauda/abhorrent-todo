@@ -19,16 +19,17 @@ export default class TaskList extends Component {
   };
 
   render() {
-    const { todoList, deleteItem, onChecked, onEditing, editTask, tick, timerToggle } = this.props;
+    const { todoList, deleteItem, onChecked, onEditing, editTask, tick, timerToggle, visibleTasks } = this.props;
 
-    const tasks = todoList.map((task) => {
+    const tasks = todoList.map((task, index) => {
       const { id, checked, date, editing, sec, isTimer, ...params } = task;
       let classNames = 'task-item';
       if (checked) classNames += ' completed';
       if (editing) classNames = 'task-item editing';
+      const hidden = todoList.includes(visibleTasks[index]) ? false : true;
 
       return (
-        <li key={id} className={classNames}>
+        <li key={id} className={classNames} hidden={hidden}>
           <Task
             date={date}
             sec={sec}
