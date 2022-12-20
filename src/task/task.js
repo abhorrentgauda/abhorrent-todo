@@ -8,7 +8,6 @@ export default class Task extends Component {
   state = {
     label: this.props.label,
     sec: this.props.sec,
-    timer: null,
   };
 
   static defaultProps = {

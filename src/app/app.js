@@ -138,8 +138,7 @@ export default class App extends Component {
         <NewTaskForm addTask={this.addNewTask} />
         <section className="main">
           <TaskList
-            todoList={todoList}
-            visibleTasks={visibleTasks}
+            todoList={visibleTasks}
             deleteItem={this.deleteItem}
             onChecked={this.onChecked}
             onEditing={this.onEditing}
