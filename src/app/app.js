@@ -24,6 +24,7 @@ export default class App extends Component {
       id: this.maxId++,
       checked: false,
       editing: false,
+      isTimer: false,
       date: new Date(),
       sec: +min * 60 + +sec,
     };
@@ -104,6 +105,12 @@ export default class App extends Component {
     this.setState({ filter });
   };
 
+  timerToggle = (id) => {
+    this.setState(({ todoList }) => ({
+      todoList: this.toggleProperty(todoList, id, 'isTimer'),
+    }));
+  };
+
   tick = (id, sec) => {
     const copyTodoList = [...this.state.todoList];
 
@@ -136,6 +143,7 @@ export default class App extends Component {
             onChecked={this.onChecked}
             onEditing={this.onEditing}
             editTask={this.editTask}
+            timerToggle={this.timerToggle}
             tick={this.tick}
           />
           <Footer

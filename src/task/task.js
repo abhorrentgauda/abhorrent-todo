@@ -32,6 +32,10 @@ export default class Task extends Component {
     clearInterval(localStorage.getItem(this.props.id));
     localStorage.removeItem(this.props.id);
 
+    if (!this.props.isTimer) {
+      this.props.timerToggle();
+    }
+
     this.timerID = setInterval(() => this.timer(), 1000);
     localStorage.setItem(this.props.id, this.timerID);
   };
@@ -39,6 +43,10 @@ export default class Task extends Component {
   timerPause = () => {
     clearInterval(localStorage.getItem(this.props.id));
     localStorage.removeItem(this.props.id);
+
+    if (this.props.isTimer) {
+      this.props.timerToggle();
+    }
   };
 
   onLabelChange = (e) => {
@@ -59,6 +67,18 @@ export default class Task extends Component {
         sec: this.props.sec,
       });
     }
+  }
+
+  componentDidMount() {
+    if (this.props.isTimer) {
+      this.timerID = setInterval(() => this.timer(), 1000);
+      localStorage.setItem(this.props.id, this.timerID);
+    }
+  }
+
+  componentWillUnmount() {
+    clearInterval(localStorage.getItem(this.props.id));
+    localStorage.removeItem(this.props.id);
   }
 
   render() {

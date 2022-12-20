@@ -19,10 +19,10 @@ export default class TaskList extends Component {
   };
 
   render() {
-    const { todoList, deleteItem, onChecked, onEditing, editTask, tick } = this.props;
+    const { todoList, deleteItem, onChecked, onEditing, editTask, tick, timerToggle } = this.props;
 
     const tasks = todoList.map((task) => {
-      const { id, checked, date, editing, sec, ...params } = task;
+      const { id, checked, date, editing, sec, isTimer, ...params } = task;
       let classNames = 'task-item';
       if (checked) classNames += ' completed';
       if (editing) classNames = 'task-item editing';
@@ -35,9 +35,11 @@ export default class TaskList extends Component {
             {...params}
             checked={checked}
             id={id}
+            isTimer={isTimer}
             deleteItem={() => deleteItem(id)}
             onChecked={() => onChecked(id)}
             onEditing={() => onEditing(id)}
+            timerToggle={() => timerToggle(id)}
             editTask={editTask}
             tick={() => tick(id, 'sec')}
           />
