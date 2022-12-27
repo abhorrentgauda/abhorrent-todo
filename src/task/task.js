@@ -33,7 +33,7 @@ export default class Task extends Component {
       this.props.timerToggle();
     }
 
-    this.timerID = setInterval(() => this.timer(), 1000);
+    this.timerID = setInterval(() => this.timer(), 200);
   };
 
   timerPause = () => {
@@ -58,12 +58,8 @@ export default class Task extends Component {
 
   componentDidMount() {
     if (this.props.isTimer) {
-      this.timerID = setInterval(() => this.timer(), 1000);
+      this.timerID = setInterval(() => this.timer(), 200);
     }
-  }
-
-  componentDidUpdate(prevProps) {
-    console.log(prevProps);
   }
 
   componentWillUnmount() {

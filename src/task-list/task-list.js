@@ -41,7 +41,7 @@ export default class TaskList extends Component {
             onEditing={() => onEditing(id)}
             timerToggle={() => timerToggle(id, 'isTimer', 'startTime')}
             editTask={editTask}
-            tick={() => tick(id, 'ms', 'startTime')}
+            tick={() => tick(id, 'ms', 'startTime', 'isTimer')}
           />
         </li>
       );

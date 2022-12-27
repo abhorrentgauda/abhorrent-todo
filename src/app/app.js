@@ -25,7 +25,6 @@ export default class App extends Component {
       checked: false,
       editing: false,
       isTimer: false,
-      timeUp: false,
       date: new Date(),
       startTime: null,
       ms: (+min * 60 + +sec) * 1000,
@@ -124,7 +123,7 @@ export default class App extends Component {
     }));
   };
 
-  tick = (id, ms, startTime) => {
+  tick = (id, ms, startTime, isTimer) => {
     const copyTodoList = [...this.state.todoList];
     const idx = copyTodoList.findIndex((el) => el.id === id);
     const copyItem = this.state.todoList[idx];
@@ -132,6 +131,12 @@ export default class App extends Component {
 
     if (copyItem[ms] > 0) {
       const newItem = { ...copyItem, [ms]: copyItem[ms] - diff, [startTime]: Date.now() };
+
+      this.setState(({ todoList }) => ({
+        todoList: [...todoList.slice(0, idx), newItem, ...todoList.slice(idx + 1)],
+      }));
+    } else {
+      const newItem = { ...copyItem, [ms]: 0, [startTime]: null, [isTimer]: false };
 
       this.setState(({ todoList }) => ({
         todoList: [...todoList.slice(0, idx), newItem, ...todoList.slice(idx + 1)],
