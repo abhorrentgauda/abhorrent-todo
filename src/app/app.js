@@ -25,8 +25,10 @@ export default class App extends Component {
       checked: false,
       editing: false,
       isTimer: false,
+      timeUp: false,
       date: new Date(),
-      sec: +min * 60 + +sec,
+      startTime: null,
+      ms: (+min * 60 + +sec) * 1000,
     };
   }
 
@@ -105,20 +107,31 @@ export default class App extends Component {
     this.setState({ filter });
   };
 
-  timerToggle = (id) => {
+  timerToggle = (id, isTimer, startTime) => {
+    const copyTodoList = [...this.state.todoList];
+    const idx = copyTodoList.findIndex((el) => el.id === id);
+    const copyItem = this.state.todoList[idx];
+
+    let newItem;
+    if (copyItem[isTimer]) {
+      newItem = { ...copyItem, [isTimer]: !copyItem[isTimer], [startTime]: null };
+    } else if (!copyItem[isTimer]) {
+      newItem = { ...copyItem, [isTimer]: !copyItem[isTimer], [startTime]: Date.now() };
+    }
+
     this.setState(({ todoList }) => ({
-      todoList: this.toggleProperty(todoList, id, 'isTimer'),
+      todoList: [...todoList.slice(0, idx), newItem, ...todoList.slice(idx + 1)],
     }));
   };
 
-  tick = (id, sec) => {
+  tick = (id, ms, startTime) => {
     const copyTodoList = [...this.state.todoList];
-
     const idx = copyTodoList.findIndex((el) => el.id === id);
-
     const copyItem = this.state.todoList[idx];
-    if (copyItem[sec] !== 0) {
-      const newItem = { ...copyItem, [sec]: --copyItem[sec] };
+    const diff = Date.now() - copyItem[startTime];
+
+    if (copyItem[ms] > 0) {
+      const newItem = { ...copyItem, [ms]: copyItem[ms] - diff, [startTime]: Date.now() };
 
       this.setState(({ todoList }) => ({
         todoList: [...todoList.slice(0, idx), newItem, ...todoList.slice(idx + 1)],

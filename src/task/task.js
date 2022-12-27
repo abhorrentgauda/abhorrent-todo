@@ -7,7 +7,6 @@ import './task.css';
 export default class Task extends Component {
   state = {
     label: this.props.label,
-    sec: this.props.sec,
   };
 
   static defaultProps = {
@@ -57,18 +56,14 @@ export default class Task extends Component {
     this.props.onEditing();
   };
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.sec !== this.props.sec) {
-      this.setState({
-        sec: this.props.sec,
-      });
-    }
-  }
-
   componentDidMount() {
     if (this.props.isTimer) {
       this.timerID = setInterval(() => this.timer(), 1000);
     }
+  }
+
+  componentDidUpdate(prevProps) {
+    console.log(prevProps);
   }
 
   componentWillUnmount() {
@@ -76,10 +71,9 @@ export default class Task extends Component {
   }
 
   render() {
-    const { label, deleteItem, onChecked, checked, date, onEditing } = this.props;
-    const { sec } = this.state;
-    let min = Math.floor(sec / 60);
-    let secDisplay = sec % 60;
+    const { label, deleteItem, onChecked, checked, date, onEditing, ms } = this.props;
+    let min = Math.floor((ms / 60000) % 60);
+    let secDisplay = Math.floor((ms / 1000) % 60);
     if (String(secDisplay).length === 1) {
       secDisplay = '0' + secDisplay;
     }
