@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 /.husky
+/.vscode
 .pnp.js
 
 # testing
