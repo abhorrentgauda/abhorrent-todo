@@ -13,6 +13,7 @@ const TaskList = ({ todoList, deleteItem, onChecked, onEditing, editTask, tick, 
       <li key={id} className={classNames}>
         <Task
           date={date}
+          id={id}
           ms={ms}
           {...params}
           checked={checked}
@@ -20,7 +21,7 @@ const TaskList = ({ todoList, deleteItem, onChecked, onEditing, editTask, tick, 
           deleteItem={() => deleteItem(id)}
           onChecked={() => onChecked(id)}
           onEditing={() => onEditing(id)}
-          timerToggle={() => timerToggle(id, 'isTimer')}
+          timerToggle={() => timerToggle(id, 'isTimer', 'startTime')}
           editTask={editTask}
           tick={() => tick(id, 'ms', 'startTime')}
         />

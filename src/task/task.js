@@ -21,18 +21,12 @@ const Task = ({
   const timerID = useRef();
 
   const timerPlay = () => {
-    clearInterval(timerID.current);
-
     if (!isTimer) {
       timerToggle();
     }
-
-    timerID.current = setInterval(() => tick(), 400);
   };
 
   const timerPause = () => {
-    clearInterval(timerID.current);
-
     if (isTimer) {
       timerToggle();
     }
@@ -50,10 +44,10 @@ const Task = ({
 
   useEffect(() => {
     if (isTimer) {
-      timerID.current = setInterval(() => tick(), 400);
+      timerID.current = setInterval(tick, 200);
     }
     return () => clearInterval(timerID.current);
-  }, []);
+  });
 
   let min = Math.floor((ms / 60000) % 60);
   let secDisplay = Math.floor((ms / 1000) % 60);
