@@ -1,106 +1,94 @@
 import { formatDistanceToNow } from 'date-fns';
-import { Component } from 'react';
-import PropTypes from 'prop-types';
+import { useState, useEffect, useRef } from 'react';
 
 import './task.css';
 
-export default class Task extends Component {
-  state = {
-    label: this.props.label,
-  };
+const Task = ({
+  date,
+  label,
+  ms,
+  checked,
+  isTimer,
+  deleteItem,
+  onChecked,
+  onEditing,
+  timerToggle,
+  editTask,
+  tick,
+  id,
+}) => {
+  const [taskName, setTaskName] = useState(label);
+  const timerID = useRef();
 
-  static defaultProps = {
-    deleteItem: () => {},
-    onChecked: () => {},
-  };
+  const timerPlay = () => {
+    clearInterval(timerID.current);
 
-  static propTypes = {
-    deleteItem: PropTypes.func,
-    onChecked: PropTypes.func,
-    checked: PropTypes.bool.isRequired,
-    label: PropTypes.string.isRequired,
-    date: PropTypes.object.isRequired,
-  };
-
-  timer = () => {
-    this.props.tick();
-  };
-
-  timerPlay = () => {
-    clearInterval(this.timerID);
-
-    if (!this.props.isTimer) {
-      this.props.timerToggle();
+    if (!isTimer) {
+      timerToggle();
     }
 
-    this.timerID = setInterval(() => this.timer(), 200);
+    timerID.current = setInterval(() => tick(), 400);
   };
 
-  timerPause = () => {
-    clearInterval(this.timerID);
+  const timerPause = () => {
+    clearInterval(timerID.current);
 
-    if (this.props.isTimer) {
-      this.props.timerToggle();
+    if (isTimer) {
+      timerToggle();
     }
   };
 
-  onLabelChange = (e) => {
-    this.setState({
-      label: e.target.value,
-    });
+  const onLabelChange = (e) => {
+    setTaskName(e.target.value);
   };
 
-  onSubmit = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
-    this.props.editTask(this.props.id, this.state.label);
-    this.props.onEditing();
+    editTask(id, taskName);
+    onEditing();
   };
 
-  componentDidMount() {
-    if (this.props.isTimer) {
-      this.timerID = setInterval(() => this.timer(), 200);
+  useEffect(() => {
+    if (isTimer) {
+      timerID.current = setInterval(() => tick(), 400);
     }
+    return () => clearInterval(timerID.current);
+  }, []);
+
+  let min = Math.floor((ms / 60000) % 60);
+  let secDisplay = Math.floor((ms / 1000) % 60);
+  if (String(secDisplay).length === 1) {
+    secDisplay = '0' + secDisplay;
+  }
+  if (String(min).length === 1) {
+    min = '0' + min;
   }
 
-  componentWillUnmount() {
-    clearInterval(this.timerID);
-  }
+  return (
+    <>
+      <div className="view">
+        <input className="toggle" type="checkbox" onChange={onChecked} checked={!!checked} />
+        <label>
+          <span className="title" onClick={onChecked}>
+            {taskName}
+          </span>
+          <span className="description">
+            <button onClick={() => timerPlay()} className="icon icon-play"></button>
+            <button onClick={() => timerPause()} className="icon icon-pause"></button>
+            <span className="timer">{`${min}: ${secDisplay} `}</span>
+          </span>
+          <span className="description">
+            `created {formatDistanceToNow(date, { includeSeconds: true, addSuffix: true })}`
+          </span>
+        </label>
+        <button type="button" className="icon icon-edit" onClick={onEditing} />
+        <button type="button" className="icon icon-destroy" onClick={deleteItem} />
+      </div>
+      <form onSubmit={onSubmit}>
+        <input type="text" className="edit" value={taskName} onChange={onLabelChange} />
+      </form>
+    </>
+  );
+};
 
-  render() {
-    const { label, deleteItem, onChecked, checked, date, onEditing, ms } = this.props;
-    let min = Math.floor((ms / 60000) % 60);
-    let secDisplay = Math.floor((ms / 1000) % 60);
-    if (String(secDisplay).length === 1) {
-      secDisplay = '0' + secDisplay;
-    }
-    if (String(min).length === 1) {
-      min = '0' + min;
-    }
-
-    return (
-      <>
-        <div className="view">
-          <input className="toggle" type="checkbox" onChange={onChecked} checked={!!checked} />
-          <label>
-            <span className="title" onClick={onChecked}>
-              {label}
-            </span>
-            <span className="description">
-              <button onClick={() => this.timerPlay()} className="icon icon-play"></button>
-              <button onClick={() => this.timerPause()} className="icon icon-pause"></button>
-              <span className="timer">{`${min}: ${secDisplay} `}</span>
-            </span>
-            <span className="description">
-              `created {formatDistanceToNow(date, { includeSeconds: true, addSuffix: true })}`
-            </span>
-          </label>
-          <button type="button" className="icon icon-edit" onClick={onEditing} />
-          <button type="button" className="icon icon-destroy" onClick={deleteItem} />
-        </div>
-        <form onSubmit={this.onSubmit}>
-          <input type="text" className="edit" value={this.state.label} onChange={this.onLabelChange} />
-        </form>
-      </>
-    );
-  }
-}
+export default Task;

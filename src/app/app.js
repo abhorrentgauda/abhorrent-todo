@@ -1,29 +1,18 @@
 import './app.css';
 
-import { Component } from 'react';
+import { useState } from 'react';
 
 import NewTaskForm from '../new-task-form';
 import Footer from '../footer';
 import TaskList from '../task-list';
 
-export default class App extends Component {
-  maxId = 100;
+const App = () => {
+  let maxId = 100;
 
-  // new branch
-
-  state = {
-    todoList: [
-      this.createItem('drink coffee', '1', '30'),
-      this.createItem('eat samsa', '1', '30'),
-      this.createItem('work hard', '1', '30'),
-    ],
-    filter: 'all',
-  };
-
-  createItem(label, min, sec) {
+  const createItem = (label, min, sec) => {
     return {
       label,
-      id: this.maxId++,
+      id: maxId++,
       checked: false,
       editing: false,
       isTimer: false,
@@ -31,39 +20,36 @@ export default class App extends Component {
       startTime: null,
       ms: (+min * 60 + +sec) * 1000,
     };
-  }
-
-  deleteItem = (id) => {
-    this.setState(({ todoList }) => {
-      const idx = todoList.findIndex((task) => task.id === id);
-
-      return {
-        todoList: [...todoList.slice(0, idx), ...todoList.slice(idx + 1)],
-      };
-    });
   };
 
-  editTask = (id, text) => {
-    this.setState(({ todoList }) => {
-      const idx = todoList.findIndex((task) => task.id === id);
-      const editedTask = { ...todoList[idx], label: text };
-      return {
-        todoList: [...todoList.slice(0, idx), editedTask, ...todoList.slice(idx + 1)],
-      };
-    });
+  const [todoList, setTodoList] = useState([
+    createItem('drink coffee', '1', '30'),
+    createItem('eat samsa', '1', '30'),
+    createItem('work hard', '1', '30'),
+  ]);
+
+  const [currentFilter, setCurrentFilter] = useState('all');
+
+  const deleteItem = (id) => {
+    const idx = todoList.findIndex((task) => task.id === id);
+
+    setTodoList([...todoList.slice(0, idx), ...todoList.slice(idx + 1)]);
   };
 
-  deleteCompletedTasks = () => {
-    this.setState(({ todoList }) => {
-      const activeTasks = todoList.filter((element) => !element.checked);
+  const editTask = (id, text) => {
+    const idx = todoList.findIndex((task) => task.id === id);
+    const editedTask = { ...todoList[idx], label: text };
 
-      return {
-        todoList: activeTasks,
-      };
-    });
+    setTodoList([...todoList.slice(0, idx), editedTask, ...todoList.slice(idx + 1)]);
   };
 
-  filterItems(items, filter) {
+  const deleteCompletedTasks = () => {
+    const activeTasks = todoList.filter((element) => !element.checked);
+
+    setTodoList(activeTasks);
+  };
+
+  const filterItems = (items, filter) => {
     if (filter === 'all') {
       return items;
     }
@@ -73,45 +59,39 @@ export default class App extends Component {
     if (filter === 'active') {
       return items.filter((item) => !item.checked);
     }
-  }
-
-  addNewTask = (text, min, sec) => {
-    const newTask = this.createItem(text, min, sec);
-
-    this.setState(({ todoList }) => ({
-      todoList: [...todoList, newTask],
-    }));
   };
 
-  toggleProperty(array, id, property) {
+  const addNewTask = (text, min, sec) => {
+    const newTask = createItem(text, min, sec);
+
+    setTodoList([...todoList, newTask]);
+  };
+
+  const toggleProperty = (array, id, property) => {
     const idx = array.findIndex((el) => el.id === id);
 
     const copyItem = array[idx];
     const newItem = { ...copyItem, [property]: !copyItem[property] };
 
     return [...array.slice(0, idx), newItem, ...array.slice(idx + 1)];
-  }
-
-  onChecked = (id) => {
-    this.setState(({ todoList }) => ({
-      todoList: this.toggleProperty(todoList, id, 'checked'),
-    }));
   };
 
-  onEditing = (id) => {
-    this.setState(({ todoList }) => ({
-      todoList: this.toggleProperty(todoList, id, 'editing'),
-    }));
+  const onChecked = (id) => {
+    setTodoList(toggleProperty(todoList, id, 'checked'));
   };
 
-  onFilterChange = (filter) => {
-    this.setState({ filter });
+  const onEditing = (id) => {
+    setTodoList(toggleProperty(todoList, id, 'editing'));
   };
 
-  timerToggle = (id, isTimer, startTime) => {
-    const copyTodoList = [...this.state.todoList];
+  const onFilterChange = (filter) => {
+    setCurrentFilter(filter);
+  };
+
+  const timerToggle = (id, isTimer, startTime) => {
+    const copyTodoList = [...todoList];
     const idx = copyTodoList.findIndex((el) => el.id === id);
-    const copyItem = this.state.todoList[idx];
+    const copyItem = todoList[idx];
 
     let newItem;
     if (copyItem[isTimer]) {
@@ -120,60 +100,51 @@ export default class App extends Component {
       newItem = { ...copyItem, [isTimer]: !copyItem[isTimer], [startTime]: Date.now() };
     }
 
-    this.setState(({ todoList }) => ({
-      todoList: [...todoList.slice(0, idx), newItem, ...todoList.slice(idx + 1)],
-    }));
+    setTodoList([...todoList.slice(0, idx), newItem, ...todoList.slice(idx + 1)]);
   };
 
-  tick = (id, ms, startTime, isTimer) => {
-    const copyTodoList = [...this.state.todoList];
+  const tick = (id, ms, startTime, isTimer) => {
+    const copyTodoList = [...todoList];
     const idx = copyTodoList.findIndex((el) => el.id === id);
-    const copyItem = this.state.todoList[idx];
+    const copyItem = todoList[idx];
     const diff = Date.now() - copyItem[startTime];
 
+    let newItem;
     if (copyItem[ms] > 0) {
-      const newItem = { ...copyItem, [ms]: copyItem[ms] - diff, [startTime]: Date.now() };
-
-      this.setState(({ todoList }) => ({
-        todoList: [...todoList.slice(0, idx), newItem, ...todoList.slice(idx + 1)],
-      }));
+      newItem = { ...copyItem, [ms]: copyItem[ms] - diff, [startTime]: Date.now() };
     } else {
-      const newItem = { ...copyItem, [ms]: 0, [startTime]: null, [isTimer]: false };
-
-      this.setState(({ todoList }) => ({
-        todoList: [...todoList.slice(0, idx), newItem, ...todoList.slice(idx + 1)],
-      }));
+      newItem = { ...copyItem, [ms]: 0, [startTime]: null, [isTimer]: false };
     }
+
+    setTodoList([...todoList.slice(0, idx), newItem, ...todoList.slice(idx + 1)]);
   };
 
-  render() {
-    const { todoList, filter } = this.state;
+  const todoCounter = todoList.filter((element) => !element.checked).length;
 
-    const todoCounter = todoList.filter((element) => !element.checked).length;
+  const visibleTasks = filterItems(todoList, currentFilter);
 
-    const visibleTasks = this.filterItems(todoList, filter);
-
-    return (
-      <section className="todoapp">
-        <NewTaskForm addTask={this.addNewTask} />
-        <section className="main">
-          <TaskList
-            todoList={visibleTasks}
-            deleteItem={this.deleteItem}
-            onChecked={this.onChecked}
-            onEditing={this.onEditing}
-            editTask={this.editTask}
-            timerToggle={this.timerToggle}
-            tick={this.tick}
-          />
-          <Footer
-            todoCounter={todoCounter}
-            filter={filter}
-            onFilterChange={this.onFilterChange}
-            deleteCompletedTasks={this.deleteCompletedTasks}
-          />
-        </section>
+  return (
+    <section className="todoapp">
+      <NewTaskForm addTask={addNewTask} />
+      <section className="main">
+        <TaskList
+          todoList={visibleTasks}
+          deleteItem={deleteItem}
+          onChecked={onChecked}
+          onEditing={onEditing}
+          editTask={editTask}
+          timerToggle={timerToggle}
+          tick={tick}
+        />
+        <Footer
+          todoCounter={todoCounter}
+          filter={currentFilter}
+          onFilterChange={onFilterChange}
+          deleteCompletedTasks={deleteCompletedTasks}
+        />
       </section>
-    );
-  }
-}
+    </section>
+  );
+};
+
+export default App;
