@@ -20,8 +20,6 @@ function Task({
   id,
 }) {
   const [taskName, setTaskName] = useState(label);
-  // const [timer, setTimer] = useState(isTimer);
-  // const timerID = useRef();
 
   const timerPlay = () => {
     if (!isTimer) {
@@ -45,18 +43,7 @@ function Task({
     onEditing();
   };
 
-  // useEffect(() => {
-  //   if (isTimer) {
-  //     timerID.current = setInterval(tick, 300);
-  //     return () => clearInterval(timerID.current);
-  //   }
-  // });
-
   useTimer(tick, 400, isTimer);
-
-  // useEffect(() => {
-  //   setTimer(isTimer);
-  // });
 
   let min = Math.floor((ms / 60000) % 60);
   let secDisplay = Math.floor((ms / 1000) % 60);
