@@ -1,9 +1,11 @@
 import { formatDistanceToNow } from 'date-fns';
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
+
+import useTimer from '../hooks';
 
 import './task.css';
 
-const Task = ({
+function Task({
   date,
   label,
   ms,
@@ -16,9 +18,10 @@ const Task = ({
   editTask,
   tick,
   id,
-}) => {
+}) {
   const [taskName, setTaskName] = useState(label);
-  const timerID = useRef();
+  // const [timer, setTimer] = useState(isTimer);
+  // const timerID = useRef();
 
   const timerPlay = () => {
     if (!isTimer) {
@@ -42,12 +45,18 @@ const Task = ({
     onEditing();
   };
 
-  useEffect(() => {
-    if (isTimer) {
-      timerID.current = setInterval(tick, 200);
-    }
-    return () => clearInterval(timerID.current);
-  });
+  // useEffect(() => {
+  //   if (isTimer) {
+  //     timerID.current = setInterval(tick, 300);
+  //     return () => clearInterval(timerID.current);
+  //   }
+  // });
+
+  useTimer(tick, 400, isTimer);
+
+  // useEffect(() => {
+  //   setTimer(isTimer);
+  // });
 
   let min = Math.floor((ms / 60000) % 60);
   let secDisplay = Math.floor((ms / 1000) % 60);
@@ -83,6 +92,6 @@ const Task = ({
       </form>
     </>
   );
-};
+}
 
 export default Task;
