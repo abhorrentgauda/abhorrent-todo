@@ -5,7 +5,7 @@ import useTimer from '../hooks';
 
 import './task.css';
 
-function Task({
+const Task = ({
   date,
   label,
   ms,
@@ -18,7 +18,7 @@ function Task({
   editTask,
   tick,
   id,
-}) {
+}) => {
   const [taskName, setTaskName] = useState(label);
 
   const timerPlay = () => {
@@ -43,7 +43,7 @@ function Task({
     onEditing();
   };
 
-  useTimer(tick, 400, isTimer);
+  useTimer(tick, 200, isTimer);
 
   let min = Math.floor((ms / 60000) % 60);
   let secDisplay = Math.floor((ms / 1000) % 60);
@@ -79,6 +79,6 @@ function Task({
       </form>
     </>
   );
-}
+};
 
 export default Task;

@@ -100,7 +100,7 @@ const App = () => {
       newItem = { ...copyItem, [isTimer]: !copyItem[isTimer], [startTime]: Date.now() };
     }
 
-    setTodoList([...todoList.slice(0, idx), newItem, ...todoList.slice(idx + 1)]);
+    setTodoList((todoList) => [...todoList.slice(0, idx), newItem, ...todoList.slice(idx + 1)]);
   };
 
   const tick = (id, ms, startTime, isTimer) => {
@@ -116,7 +116,7 @@ const App = () => {
       newItem = { ...copyItem, [ms]: 0, [startTime]: null, [isTimer]: false };
     }
 
-    setTodoList([...todoList.slice(0, idx), newItem, ...todoList.slice(idx + 1)]);
+    setTodoList((todoList) => [...todoList.slice(0, idx), newItem, ...todoList.slice(idx + 1)]);
   };
 
   const todoCounter = todoList.filter((element) => !element.checked).length;
